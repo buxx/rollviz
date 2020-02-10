@@ -15,24 +15,23 @@ struct RollViz {
 
 impl Engine for RollViz {
     fn render(&mut self, api: &mut dyn DoryenApi) {
-        dbg!("HELLO");
+        api.con().clear(
+            Some((0, 0, 0, 255)),
+            Some((0, 0, 0, 255)),
+            Some(' ' as u16)
+        );
         if let (Some(tile)) = self.tile {
             for row_i in 0..5 {
                 for col_i in 0..5 {
-                    api.con().back(
+                    api.con().ascii(
                         col_i,
                         row_i,
-                        (128, 128, 128, 255),
+                        tile as u16,
                     );
                     api.con().fore(
                         col_i,
                         row_i,
-                        (128, 128, 128, 255),
-                    );
-                    api.con().ascii(
-                        col_i,
-                        row_i,
-                        '@' as u16,
+                        (255, 255, 255, 255),
                     );
                 }
             }
@@ -87,16 +86,15 @@ fn main() {
         Opt::tile{input} => {
             let mut tiles = image::open("static/Teeto_K_18x18.png").unwrap();
             let tile = image::open(input.to_str().unwrap()).unwrap();
-//            for row_i in 0..18 {
-//                for col_i in 0..18 {
-//                    let pixel = tile.get_pixel(col_i, row_i);
-//                    tiles.put_pixel(col_i + 18, row_i, pixel);
-//                }
-//            }
-            tiles.save("tmp_18x18.png").unwrap();
-            options.font_path = "Teeto_K_18x18.png".to_owned();
-//            options.font_path = "tmp_18x18.png".to_owned();
-            Box::new(RollViz{image: None, tile: Some(0 as u16)})
+            for row_i in 0..18 {
+                for col_i in 0..18 {
+                    let pixel = tile.get_pixel(col_i, row_i);
+                    tiles.put_pixel(col_i + 18, row_i, pixel);
+                }
+            }
+            tiles.save("static/tmp_18x18.png").unwrap();
+            options.font_path = "tmp_18x18.png".to_owned();
+            Box::new(RollViz{image: None, tile: Some(1 as u16)})
         }
     };
 
