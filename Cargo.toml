@@ -1,0 +1,10 @@
+[package]
+name = "rollviz"
+version = "0.1.0"
+authors = ["Bastien Sevajol <bastien.sevajol@algoo.fr>"]
+edition = "2018"
+
+[dependencies]
+structopt = "0.2"
+doryen-rs="1.2.*"
+image = "0.23.0"
